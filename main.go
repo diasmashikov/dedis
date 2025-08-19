@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"sync"
 )
 
 var (
@@ -14,10 +13,7 @@ var (
 
 func main() {
 	flag.Parse()
-	store := struct {
-		sync.RWMutex
-		m map[string]string
-	}{ m: make(map[string]string)}
+	store := NewCache()
 
 	http.HandleFunc("/set", func(w http.ResponseWriter, r *http.Request) {
 		k := r.URL.Query().Get("k")
@@ -28,9 +24,7 @@ func main() {
 			return
 		}
 		
-		store.Lock()
-		store.m[k] = v
-		store.Unlock()
+		store.Set(k, v)
 		fmt.Fprintln(w, v)
 	})
 
@@ -42,9 +36,10 @@ func main() {
 			return
 		}
 
-		store.RLock()
-		v := store.m[k]
-		store.RUnlock()
+		v, ok := store.Get(k)
+		if !ok {
+			http.Error(w, "not found", http.StatusNotFound)
+		}
 		fmt.Fprintln(w, v)
 	})
 
