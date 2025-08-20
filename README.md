@@ -17,3 +17,6 @@ no sharding to handle to scale writes horizontally
 no proxy for client read routing or future writes
 no consistent hashing
 no monitoring as of now
+
+
+<img width="959" height="300" alt="Screenshot 2025-08-19 at 19 45 22" src="https://github.com/user-attachments/assets/d9f4c782-b14f-458f-ad70-9f82f47becc1" />
