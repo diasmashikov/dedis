@@ -38,6 +38,10 @@ func main() {
 		fmt.Fprintln(w, "ok")
 	})
 
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "ok")
+	})
+
 	http.HandleFunc("/get", func(w http.ResponseWriter, r *http.Request) {
         k := r.URL.Query().Get("k")
         if k == "" {
