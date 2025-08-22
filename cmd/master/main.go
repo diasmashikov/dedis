@@ -104,8 +104,14 @@ func main() {
 		fmt.Fprintln(w, strings.Join(addrs, "\n"))
 	})
 
+	http.HandleFunc("/master", func(w http.ResponseWriter, r *http.Request) {
+		mu.RLock()
+		defer mu.RUnlock()
+		addr := fmt.Sprintf("localhost:%d", *port)
+		fmt.Fprintln(w, addr)
+	})
+
 	addr := fmt.Sprintf(":%d", *port)
 	log.Printf("master listening on %s", addr)
 	log.Fatal(http.ListenAndServe(addr, nil))
-
 }
